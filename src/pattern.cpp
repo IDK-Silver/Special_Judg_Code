@@ -22,7 +22,7 @@ enum Status
     AC = 0, WA = 1, ERROR = -1
 };
 
-bool compare_ans(const std::string& str,  std::unique_ptr<std::ifstream> & stream);
+bool compare_ans(const std::string& str,  std::unique_ptr<std::ifstream> & stream, const bool & ignore_case = false);
 template <class T> bool compare_ans(const T & var,  std::unique_ptr<std::ifstream> & stream);
 template <class T> bool compare_ans(const T & var,  std::unique_ptr<std::ifstream> & stream, const T & epsilon);
 template <class T, class S> void print_log(const T & var, const S & ans, const bool & equal);
@@ -31,6 +31,7 @@ Status solution(std::unique_ptr<std::ifstream> &in, std::unique_ptr<std::ifstrea
 {
 
     return Status::AC;
+
 }
 
 int main(int argc, char *args[])
@@ -56,11 +57,11 @@ int main(int argc, char *args[])
         exit(Status::ERROR);
     }
 
-#if SPJ_LOG
-    std::cout << std::left << std::setw(8) << "SPJ" << "\t" \
+    #if SPJ_LOG
+        std::cout << std::left << std::setw(8) << "SPJ" << "\t" \
                   << std::left << std::setw(8) << "Solution" << "\t" \
                   << "Equal\n\n";
-#endif
+    #endif
 
     // run solution
     Status solution_status = solution(input_data_file, user_output_file);
@@ -106,8 +107,14 @@ template <class T> bool compare_ans(const T & var,  std::unique_ptr<std::ifstrea
 
     return true;
 }
-bool compare_ans(const std::string& str,  std::unique_ptr<std::ifstream> & stream)
+bool compare_ans(const std::string& str,  std::unique_ptr<std::ifstream> & stream, const bool & ignore_case)
 {
+
+    auto to_upper = [](std::string str) {
+        for (auto & c: str) c = toupper(c);
+        return str;
+    };
+
     // to split string like cin
     std::stringstream  ss(str);
 
@@ -121,11 +128,18 @@ bool compare_ans(const std::string& str,  std::unique_ptr<std::ifstream> & strea
     while (ss >> var)
     {
         *stream >> ans;
-        equal = ans == var;
 
-#if SPJ_LOG
+        if (ignore_case)
+        {
+            var = to_upper(var);
+            ans = to_upper(ans);
+        }
+
+        equal =  ans == var;
+
+    #if SPJ_LOG
         print_log(var, ans, equal);
-#endif
+    #endif
     }
 
     if (not equal)
