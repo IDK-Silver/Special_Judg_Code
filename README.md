@@ -1,10 +1,10 @@
 # Special Judge Code
 # 介紹
-提供了一個 Online Judge Special Judg 的模板, 並提供測試修改過後模板的測試方法
+提供了一個 Online Judge Special Judge 的模板, 並提供測試修改過後模板的測試方法
 
 # 環境需求
 - Linux
-- GCC ( 支援c++ 11 的版本 ) 
+- GCC ( 支援C++ 11 的版本 ) 
 - CMake 
 
 # 編譯測試
@@ -24,7 +24,7 @@ cmake ..
 
 4. 生成測試文件資訊
 ```
-cmake --build . 
+cmake --build . --target Run_SPJ
 ```
 
 # 使用說明
